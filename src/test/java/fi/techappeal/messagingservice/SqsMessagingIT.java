@@ -6,11 +6,17 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 /**
- * Integration test for MessagingService.
+ * Integration test for SQS messaging service.
+ * Assumes that AWS credentials are available.
+ * Assumes that there is a queue named "MyQ" in AWS account.
+ * Assumes that the queue is empty.
  */
 public class SqsMessagingIT {
+    /**
+     * Test that we can send, receive and complete a message.
+     */
     @Test
-    void test() {
+    void testSendReceiveCompeteMessage() {
         // Arrange
         MessagingService queueService = MessagingServiceBuilder
             .builder()
