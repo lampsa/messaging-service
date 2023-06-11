@@ -1,6 +1,6 @@
-package fi.techappeal.sqsproto;
+package fi.techappeal.messagingservice;
 
-import fi.techappeal.sqsproto.sqs.SqsClientWrapper;
+import fi.techappeal.messagingservice.sqs.SqsClientWrapper;
 
 /**
  * Builder for {@link MessagingService}.

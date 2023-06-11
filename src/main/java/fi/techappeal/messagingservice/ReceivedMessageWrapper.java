@@ -1,4 +1,4 @@
-package fi.techappeal.sqsproto;
+package fi.techappeal.messagingservice;
 
 import java.util.Map;
 
