@@ -30,6 +30,6 @@ public class SqsMessagingIT {
         assertEquals(1, messages.size());
         ReceivedMessageWrapper msg = messages.get(0);
         assertEquals("Hello World", msg.getPayload());
-        assertEquals(2, msg.getAttributes().size());g
+        assertEquals(2, msg.getAttributes().size());
     }
 }
