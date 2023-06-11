@@ -3,6 +3,7 @@ package fi.techappeal.messagingservice.sqs;
 import fi.techappeal.messagingservice.ReceivedMessageWrapper;
 import fi.techappeal.messagingservice.SendMessageBuilder;
 import fi.techappeal.messagingservice.SendMessageWrapper;
+import fi.techappeal.messagingservice.SqsMessagingIT;
 import fi.techappeal.messagingservice.exceptions.RateLimitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
  * Unit tests for {@link SqsClientWrapper}.
  * These tests test the behavior of the class in isolation, i.e. the actual SqsClient is mocked.
  *
+ * @see SqsMessagingIT for integration tests.
  */
 class SqsClientWrapperTest {
     private SqsClientWrapper clientWrapper;
