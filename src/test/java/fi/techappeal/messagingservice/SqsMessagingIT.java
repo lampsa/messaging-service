@@ -28,8 +28,13 @@ public class SqsMessagingIT {
 
         // Assert
         assertEquals(1, messages.size());
-        ReceivedMessageWrapper msg = messages.get(0);
-        assertEquals("Hello World", msg.getPayload());
-        assertEquals(2, msg.getAttributes().size());
+        ReceivedMessageWrapper receivedMessage = messages.get(0);
+        assertEquals("Hello World", receivedMessage.getPayload());
+        assertEquals(2, receivedMessage.getAttributes().size());
+        assertEquals("value1", receivedMessage.getAttributes().get("attr1"));
+        assertEquals("value2", receivedMessage.getAttributes().get("attr2"));
+
+        // Act
+        queueService.completeMessage("MyQ", receivedMessage.getHandle());
     }
 }

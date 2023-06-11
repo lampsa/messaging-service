@@ -62,6 +62,7 @@ public class SqsClientWrapper implements MessagingService {
         ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .maxNumberOfMessages(maxMessages)
+                .messageAttributeNames("All")
                 .build();
 
         ReceiveMessageResponse receiveMessageResponse = sqsClient.receiveMessage(receiveMessageRequest);
@@ -147,7 +148,6 @@ public class SqsClientWrapper implements MessagingService {
         for (Map.Entry<String, MessageAttributeValue> entry : message.messageAttributes().entrySet()) {
             attributes.put(entry.getKey(), entry.getValue().stringValue());
         }
-
         return ReceivedMessageBuilder.forPayload(message.body())
             .attributes(attributes)
             .id(message.messageId())
