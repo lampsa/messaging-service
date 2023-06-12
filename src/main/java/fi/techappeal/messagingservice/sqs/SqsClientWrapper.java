@@ -23,8 +23,8 @@ public class SqsClientWrapper implements MessagingService {
     public SqsClientWrapper() {
         String regionString = System.getProperty("MESSAGING_SERVICE_REGION", "eu-central-1");
         this.sqsClient = SqsClient.builder()
-                .region(Region.of(regionString))
-                .build();
+            .region(Region.of(regionString))
+            .build();
     }
 
     /**
@@ -38,10 +38,10 @@ public class SqsClientWrapper implements MessagingService {
         try {
             String queueUrl = getQueueUrlForQueue(queueName);
             SendMessageRequest sendMessageRequest = SendMessageRequest.builder()
-                    .queueUrl(queueUrl)
-                    .messageBody(message.getPayload())
-                    .messageAttributes(createMessageAttributes(message.getAttributes()))
-                    .build();
+                .queueUrl(queueUrl)
+                .messageBody(message.getPayload())
+                .messageAttributes(createMessageAttributes(message.getAttributes()))
+                .build();
             sqsClient.sendMessage(sendMessageRequest);
         } catch (SqsException e) {
             SqsExceptionMapper.mapToCloudAgnosticException(e);
@@ -60,10 +60,10 @@ public class SqsClientWrapper implements MessagingService {
     public List<ReceivedMessageWrapper> receiveMessages(String queueName, int maxMessages) {
         String queueUrl = getQueueUrlForQueue(queueName);
         ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .maxNumberOfMessages(maxMessages)
-                .messageAttributeNames("All")
-                .build();
+            .queueUrl(queueUrl)
+            .maxNumberOfMessages(maxMessages)
+            .messageAttributeNames("All")
+            .build();
 
         ReceiveMessageResponse receiveMessageResponse = sqsClient.receiveMessage(receiveMessageRequest);
         List<Message> messages = receiveMessageResponse.messages();
@@ -81,9 +81,9 @@ public class SqsClientWrapper implements MessagingService {
     public void completeMessage(String queueName, String handle) {
         String queueUrl = getQueueUrlForQueue(queueName);
         DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .receiptHandle(handle)
-                .build();
+            .queueUrl(queueUrl)
+            .receiptHandle(handle)
+            .build();
         sqsClient.deleteMessage(deleteMessageRequest);
     }
 
@@ -123,9 +123,9 @@ public class SqsClientWrapper implements MessagingService {
         Map<String, MessageAttributeValue> messageAttributes = new HashMap<>();
         for (String key : attributes.keySet()) {
             MessageAttributeValue messageAttributeValue = MessageAttributeValue.builder()
-                    .dataType("String")
-                    .stringValue(attributes.get(key))
-                    .build();
+                .dataType("String")
+                .stringValue(attributes.get(key))
+                .build();
             messageAttributes.put(key, messageAttributeValue);
         }
         return messageAttributes;
