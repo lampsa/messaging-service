@@ -21,7 +21,7 @@ public class SqsClientWrapper implements MessagingService {
     private SqsClient sqsClient;
 
     public SqsClientWrapper() {
-        String regionString = System.getProperty("aws.region", "eu-central-1");
+        String regionString = System.getProperty("MESSAGING_SERVICE_REGION", "eu-central-1");
         this.sqsClient = SqsClient.builder()
                 .region(Region.of(regionString))
                 .build();

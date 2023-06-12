@@ -6,7 +6,7 @@ import fi.techappeal.messagingservice.sqs.SqsClientWrapper;
  * Builder for {@link MessagingService}.
  */
 public class MessagingServiceBuilder {
-    private String service = System.getProperty("message.service", "sqs");
+    private String service = System.getProperty("MESSAGING_SERVICE_PROVIDER", "sqs");
 
     /**
      * Private constructor - use {@link #builder()} instead.

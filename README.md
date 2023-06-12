@@ -54,5 +54,6 @@ The Cloud Agnostic Messaging Service uses the following environment variables fo
 |------------------------------| --- |--------------------------------------------------------------------|
 | `MESSAGING_SERVICE_PROVIDER` | All | The messaging provider to use. Currently, only `sqs` is supported. |
 | `MESSAGING_SERVICE_REGION`   | AWS SQS | The AWS region to use. |
+
 Please make sure you have the necessary credentials and permissions set up for the chosen provider.
 
