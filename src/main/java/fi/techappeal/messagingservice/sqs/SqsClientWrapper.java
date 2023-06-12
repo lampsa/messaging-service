@@ -75,14 +75,14 @@ public class SqsClientWrapper implements MessagingService {
      * Completes processing of a message. In the case of SQS, this means deleting the message from the queue.
      *
      * @param queueName name of the queue
-     * @param messageId id of the message to be completed
+     * @param handle of the message to be completed
      */
     @Override
-    public void completeMessage(String queueName, String messageId) {
+    public void completeMessage(String queueName, String handle) {
         String queueUrl = getQueueUrlForQueue(queueName);
         DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
                 .queueUrl(queueUrl)
-                .receiptHandle(messageId)
+                .receiptHandle(handle)
                 .build();
         sqsClient.deleteMessage(deleteMessageRequest);
     }

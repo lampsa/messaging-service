@@ -23,9 +23,9 @@ public interface MessagingService {
     /**
      * Complete processing a message.
      * @param queueName name of the queue
-     * @param messageId id of the message to be completed
+     * @param handle of the message to be completed
      */
-    void completeMessage(String queueName, String messageId);
+    void completeMessage(String queueName, String handle);
 
     /**
      * Close the messaging service.
