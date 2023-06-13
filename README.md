@@ -49,10 +49,7 @@ and receive messages. Small example below:
 ```java
 public class MessageSender {
     public void main(String[] args) {
-        MessagingService queueService = MessagingServiceBuilder
-               .builder()
-               .service("sqs")
-               .build();
+        MessagingService queueService = MessagingServiceBuilder.builder().build();
         SendMessageWrapper message = SendMessageBuilder
                .forPayload("Hello World")
                .attribute("attr1", "value1")
