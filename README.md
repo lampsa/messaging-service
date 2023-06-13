@@ -17,8 +17,9 @@ The library is designed to be extensible, so you can easily add support for new 
 - Currently, supports AWS SQS as the service provider
 - Provides a common interface for message publishing and consumption operations
 - Handles provider-specific exceptions and maps them to generic error categories
-- Supports message attributes and headers for enriching message metadata
+- Supports message attributes for enriching message metadata
 - JSON payload serialization and deserialization is not implemented
+- Asynchronous messaging is not supported
 
 # Getting Started
 To get started with the Cloud Agnostic Messaging Service, follow these steps:
@@ -37,7 +38,6 @@ public class MessageSender {
         MessagingService messagingService = MessagingServiceBuilder.builder().build();
         MessageWrapper message = MessageBuilder.forPayload("Hello, world!")
                 .attribute("priority", "high")
-                .header("Content-Type", "text/plain")
                 .build();
 
         messagingService.sendMessage("my-queue", message);
