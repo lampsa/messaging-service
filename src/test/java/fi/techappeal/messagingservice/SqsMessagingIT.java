@@ -40,7 +40,7 @@ public class SqsMessagingIT {
         assertEquals("value1", receivedMessage.getAttributes().get("attr1"));
         assertEquals("value2", receivedMessage.getAttributes().get("attr2"));
 
-        // Act
+        // Clean up
         queueService.completeMessage("MyQ", receivedMessage.getHandle());
     }
 }
