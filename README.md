@@ -23,8 +23,25 @@ The library is designed to be extensible, so you can easily add support for new 
 
 # Getting Started
 To get started with the Cloud Agnostic Messaging Service, follow these steps:
+1. Clone the repository: git clone https://github.com/lampsa/messaging-service.git
+2. Build the project: mvn clean install -DskipTests
+   - If you want to run the tests, you need to have an AWS account and set up the necessary credentials and permissions
+   - Test also assumes an empty SQS queue named MyQ exists in the default (eu-central-1) region
+   - See the [AWS documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html) for more information on setting up AWS credentials
+   - See src/test/java/fi/techappeal/messagingservice/sqs/SqsMessagingIT.java for more information on the test setup
+2. Include the Cloud Agnostic Messaging Service library in your project.
 
-1. Include the Cloud Agnostic Messaging Service library in your project.
+```xml
+    <dependencies>
+        <dependency>
+            <groupId>fi.techappeal</groupId>
+            <artifactId>messaging-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        ...
+    </dependencies>
+```
+---
 2. Create a `MessagingService` instance using the `MessagingServiceBuilder` class.
 3. Use the `MessagingService` instance to send and receive messages.
 4. Refer to the library documentation and Javadoc for more detailed information on the available methods and customization options.
