@@ -11,7 +11,7 @@ is portable across different providers.
 
 The library is designed to be extensible, so you can easily add support for new cloud providers.
 
-**See:** [project page](https://github.com/lampsa/messaging-service/wiki) for design and implementation details.
+**See:** [project page](https://github.com/lampsa/messaging-service/wiki/Cloud-Agnostic-Messaging-Service) for design and implementation details.
 
 # Features
 - Currently, supports AWS SQS as the service provider
