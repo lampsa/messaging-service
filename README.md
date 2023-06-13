@@ -29,7 +29,7 @@ To get started with the Cloud Agnostic Messaging Service, follow these steps:
    - Test also assumes an empty SQS queue named MyQ exists in the default (eu-central-1) region
    - See the [AWS documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html) for more information on setting up AWS credentials
    - See src/test/java/fi/techappeal/messagingservice/sqs/SqsMessagingIT.java for more information on the test setup
-2. Include the Cloud Agnostic Messaging Service library in your project.
+3. Include the Cloud Agnostic Messaging Service library in your project.
 
 ```xml
     <dependencies>
@@ -42,28 +42,34 @@ To get started with the Cloud Agnostic Messaging Service, follow these steps:
     </dependencies>
 ```
 ---
-2. Create a `MessagingService` instance using the `MessagingServiceBuilder` class.
-3. Use the `MessagingService` instance to send and receive messages.
-4. Refer to the library documentation and Javadoc for more detailed information on the available methods and customization options.
+To use the Cloud Agnostic Messaging Service, you need to create an instance of the MessagingService interface.
+This will provide you with a cloud-specific instance of the MessagingService interface that you can use to send 
+and receive messages. Small example below:
 
 ```java
-import fi.techappeal.messagingservice.MessagingService;
-import fi.techappeal.messagingservice.MessagingServiceBuilder;
-
 public class MessageSender {
-    public void send() {
-        MessagingService messagingService = MessagingServiceBuilder.builder().build();
-        MessageWrapper message = MessageBuilder.forPayload("Hello, world!")
-                .attribute("priority", "high")
-                .build();
+    public void main(String[] args) {
+        MessagingService queueService = MessagingServiceBuilder
+               .builder()
+               .service("sqs")
+               .build();
+        SendMessageWrapper message = SendMessageBuilder
+               .forPayload("Hello World")
+               .attribute("attr1", "value1")
+               .attribute("attr2", "value2")
+               .build();
+        
+        queueService.sendMessage("MyQ", message);
+        List<ReceivedMessageWrapper> messages = queueService.receiveMessages("MyQ", 1); // Receive 1 message
 
-        messagingService.sendMessage("my-queue", message);
+        ReceivedMessageWrapper receivedMessage = messages.get(0);
+        // Process message
+       
+        queueService.completeMessage("MyQ", receivedMessage.getHandle());
     }
 }
-
 ```
-Similarly, you can receive messages from a queue:
-
+---
 # Configuration
 The Cloud Agnostic Messaging Service uses the following environment variables for configuration:
 
