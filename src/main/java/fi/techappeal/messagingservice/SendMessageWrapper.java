@@ -7,10 +7,12 @@ import java.util.Map;
  */
 public class SendMessageWrapper {
     private final String payload;
+    private final String partitionKey;
     private final Map<String, String> attributes;
 
-    SendMessageWrapper(String payload, Map<String, String> attributes) {
+    SendMessageWrapper(String payload, String partitionKey, Map<String, String> attributes) {
         this.payload = payload;
+        this.partitionKey = partitionKey;
         this.attributes = attributes;
     }
 
@@ -28,5 +30,10 @@ public class SendMessageWrapper {
      */
     public String getPayload() {
         return payload;
+    }
+
+
+    public String getPartitionKey() {
+        return partitionKey;
     }
 }

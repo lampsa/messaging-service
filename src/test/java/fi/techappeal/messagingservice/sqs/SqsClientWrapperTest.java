@@ -42,10 +42,11 @@ class SqsClientWrapperTest {
      * Test that the cloud-agnostic message is correctly mapped to a SQS specific request.
      */
     @Test
-    void sendMessage_correctRequest() {
+    void sendMessage_mapsToCorrectRequest() {
         // Arrange
         String payload = "Hello, world!";
         SendMessageWrapper message = SendMessageBuilder.forPayload(payload)
+                .partitionKey("key")
                 .attribute("attr1", "value1")
                 .attribute("attr2", "value2")
                 .build();
@@ -63,6 +64,7 @@ class SqsClientWrapperTest {
         assertEquals(2, request.messageAttributes().size());
         assertEquals("value1", request.messageAttributes().get("attr1").stringValue());
         assertEquals("value2", request.messageAttributes().get("attr2").stringValue());
+        assertEquals("key", request.messageGroupId());
     }
 
     /**

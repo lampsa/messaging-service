@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class SendMessageBuilder {
     private String payload;
+    private String partitionKey;
     private final Map<String, String> attributes;
 
     private SendMessageBuilder() {
@@ -45,8 +46,18 @@ public class SendMessageBuilder {
         this.attributes.put(key, value);
         return this;
     }
-    
+
+    /**
+     * Sets the partition key of the message.
+     * @param partitionKey partition key of the message
+     * @return this builder
+     */
+    public SendMessageBuilder partitionKey(String partitionKey) {
+        this.partitionKey = partitionKey;
+        return this;
+    }
+
     public SendMessageWrapper build() {
-        return new SendMessageWrapper(payload, attributes);
+        return new SendMessageWrapper(payload, partitionKey, attributes);
     }
 }

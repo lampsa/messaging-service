@@ -40,6 +40,7 @@ public class SqsClientWrapper implements MessagingService {
             SendMessageRequest sendMessageRequest = SendMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .messageBody(message.getPayload())
+                .messageGroupId(message.getPartitionKey())
                 .messageAttributes(createMessageAttributes(message.getAttributes()))
                 .build();
             sqsClient.sendMessage(sendMessageRequest);
