@@ -35,11 +35,17 @@ public class SendMessageBuilder {
         return this;
     }
 
+    /**
+     * Adds an attribute to the message.
+     * @param key key of the attribute
+     * @param value value of the attribute
+     * @return this builder
+     */
     public SendMessageBuilder attribute(String key, String value) {
         this.attributes.put(key, value);
         return this;
     }
-
+    
     public SendMessageWrapper build() {
         return new SendMessageWrapper(payload, attributes);
     }
