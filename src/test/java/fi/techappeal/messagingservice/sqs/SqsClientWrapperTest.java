@@ -4,6 +4,7 @@ import fi.techappeal.messagingservice.ReceivedMessageWrapper;
 import fi.techappeal.messagingservice.SendMessageBuilder;
 import fi.techappeal.messagingservice.SendMessageWrapper;
 import fi.techappeal.messagingservice.SqsMessagingIT;
+import fi.techappeal.messagingservice.exceptions.NoSuchQueueException;
 import fi.techappeal.messagingservice.exceptions.RateLimitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,6 +79,22 @@ class SqsClientWrapperTest {
 
         // Act and Assert
         assertThrows(RateLimitException.class, () -> clientWrapper.sendMessage(queueName, message));
+    }
+
+    /**
+     * Test that SQS specific QueueDoesNotExistException is mapped to a generic NoSuchQueueException.
+     */
+    @Test
+    void sendMessage_NoSuchQueue() {
+        // Arrange
+        when(mockSqsClient.sendMessage(any(SendMessageRequest.class)))
+                .thenThrow(QueueDoesNotExistException.builder().message("Queue does not exist").build());
+        SendMessageWrapper message = SendMessageBuilder.forPayload("Hello, world!").build();
+        String queueName = "MyQ";
+        clientWrapper.setQueueUrlCache(queueName, "ignore"); // Set queue URL to avoid mocking SqsClient.getQueueUrl
+
+        // Act and Assert
+        assertThrows(NoSuchQueueException.class, () -> clientWrapper.sendMessage(queueName, message));
     }
 
     /**
