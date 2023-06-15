@@ -1,27 +1,26 @@
 package fi.techappeal.messagingservice.sqs;
 
-import fi.techappeal.messagingservice.MessagingService;
-import fi.techappeal.messagingservice.ReceivedMessageBuilder;
-import fi.techappeal.messagingservice.ReceivedMessageWrapper;
-import fi.techappeal.messagingservice.SendMessageWrapper;
+import fi.techappeal.messagingservice.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * A wrapper for SQS client that maps the cloud-agnostic MessagingService interface to SQS client.
  */
-public class SqsClientWrapper implements MessagingService {
+public class SqsMessageSender implements MessageSender {
+    private static final Logger logger = LoggerFactory.getLogger(SqsMessageSender.class);
     private final Map<String, String> queueUrlCache = new HashMap<>(); // queue name -> queue url cache
     private SqsClient sqsClient;
 
-    public SqsClientWrapper() {
+    public SqsMessageSender() {
         String regionString = System.getProperty("MESSAGING_SERVICE_REGION", "eu-central-1");
+        logger.debug("Initiating SQS sender client using region {}", regionString);
         this.sqsClient = SqsClient.builder()
             .region(Region.of(regionString))
             .build();
@@ -43,49 +42,11 @@ public class SqsClientWrapper implements MessagingService {
                 .messageGroupId(message.getPartitionKey())
                 .messageAttributes(createMessageAttributes(message.getAttributes()))
                 .build();
-            sqsClient.sendMessage(sendMessageRequest);
+            logger.info("Sending message [{}] to queue {}", sendMessageRequest.toString(), queueName);
+            SendMessageResponse response = sqsClient.sendMessage(sendMessageRequest);
         } catch (SqsException e) {
             SqsExceptionMapper.mapToCloudAgnosticException(e);
         }
-    }
-
-
-    /**
-     * Receives messages from an SQS queue.
-     *
-     * @param queueName   name of the queue
-     * @param maxMessages maximum number of messages to receive
-     * @return list of messages
-     */
-    @Override
-    public List<ReceivedMessageWrapper> receiveMessages(String queueName, int maxMessages) {
-        String queueUrl = getQueueUrlForQueue(queueName);
-        ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
-            .queueUrl(queueUrl)
-            .maxNumberOfMessages(maxMessages)
-            .messageAttributeNames("All")
-            .build();
-
-        ReceiveMessageResponse receiveMessageResponse = sqsClient.receiveMessage(receiveMessageRequest);
-        List<Message> messages = receiveMessageResponse.messages();
-
-        return messages.stream().map(this::createMessageWrapper).collect(Collectors.toList());
-    }
-
-    /**
-     * Completes processing of a message. In the case of SQS, this means deleting the message from the queue.
-     *
-     * @param queueName name of the queue
-     * @param handle of the message to be completed
-     */
-    @Override
-    public void completeMessage(String queueName, String handle) {
-        String queueUrl = getQueueUrlForQueue(queueName);
-        DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
-            .queueUrl(queueUrl)
-            .receiptHandle(handle)
-            .build();
-        sqsClient.deleteMessage(deleteMessageRequest);
     }
 
     @Override
@@ -131,28 +92,9 @@ public class SqsClientWrapper implements MessagingService {
         }
         return messageAttributes;
     }
-
-    /**
-     * Get queue url for a queue name from the SQS service. Cache the queue url for future use.
-     *
-     * @param queueName queue name
-     * @return queue url
-     */
     private String getQueueUrlForQueue(String queueName) {
         return queueUrlCache.computeIfAbsent(queueName,
                 name -> sqsClient.getQueueUrl(GetQueueUrlRequest.builder().queueName(name).build()).queueUrl()
         );
-    }
-
-    private ReceivedMessageWrapper createMessageWrapper(Message message) {
-        Map<String, String> attributes = new HashMap<>();
-        for (Map.Entry<String, MessageAttributeValue> entry : message.messageAttributes().entrySet()) {
-            attributes.put(entry.getKey(), entry.getValue().stringValue());
-        }
-        return ReceivedMessageBuilder.forPayload(message.body())
-            .attributes(attributes)
-            .id(message.messageId())
-            .handle(message.receiptHandle())
-            .build();
     }
 }

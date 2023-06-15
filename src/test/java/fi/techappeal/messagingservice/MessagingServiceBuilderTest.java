@@ -1,11 +1,12 @@
 package fi.techappeal.messagingservice;
 
+import fi.techappeal.messagingservice.sqs.SqsMessageSender;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests for ${@link MessagingServiceBuilder}.
+ * Tests for ${@link MessageSender}.
  */
 class MessagingServiceBuilderTest {
     /**
@@ -14,11 +15,9 @@ class MessagingServiceBuilderTest {
     @Test
     void testSqsProvider() {
         // Act
-        MessagingService messagingService = MessagingServiceBuilder.builder()
-                .service("sqs")
-                .build();
+        MessageSender messagingService = new MessageSender.Builder().service("sqs").build();
         // Assert
-        assertTrue(messagingService instanceof fi.techappeal.messagingservice.sqs.SqsClientWrapper);
+        assertTrue(messagingService instanceof SqsMessageSender);
     }
 
     /**
@@ -27,8 +26,7 @@ class MessagingServiceBuilderTest {
     @Test
     void testPubsubProvider() {
         // Act
-        MessagingServiceBuilder builder = MessagingServiceBuilder.builder()
-                .service("pubsub");
+        MessageSender.Builder builder = new MessageSender.Builder().service("pubsub");
         // Assert
         assertThrows(IllegalStateException.class, builder::build);
     }
@@ -39,8 +37,18 @@ class MessagingServiceBuilderTest {
     @Test
     void testEventgridProvider() {
         // Act
-        MessagingServiceBuilder builder = MessagingServiceBuilder.builder()
-                .service("eventgrid");
+        MessageSender.Builder builder = new MessageSender.Builder().service("eventgrid");
+        // Assert
+        assertThrows(IllegalStateException.class, builder::build);
+    }
+
+    /**
+     * Test that the MessagingServiceBuilder throws an exception when the service is unknown.
+     */
+    @Test
+    void testUnknownProvider() {
+        // Act
+        MessageSender.Builder builder = new MessageSender.Builder().service("unknown");
         // Assert
         assertThrows(IllegalStateException.class, builder::build);
     }
