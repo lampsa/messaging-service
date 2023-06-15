@@ -57,22 +57,6 @@ public class SqsMessageReceiver implements MessageReceiver {
     }
 
     /**
-     * Completes processing of a message. In the case of SQS, this means deleting the message from the queue.
-     *
-     * @param queueName name of the queue
-     * @param handle of the message to be completed
-     */
-    @Override
-    public void completeMessage(String queueName, String handle) {
-        String queueUrl = getQueueUrlForQueue(queueName);
-        DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .receiptHandle(handle)
-                .build();
-        sqsClient.deleteMessage(deleteMessageRequest);
-    }
-
-    /**
      * Allows manually setting the SQS client. (Used for testing.)
      *
      * @param sqsClient Mocked SQS client
@@ -115,7 +99,21 @@ public class SqsMessageReceiver implements MessageReceiver {
         return new ReceivedMessageWrapper.Builder().payload(message.body())
                 .attributes(attributes)
                 .id(message.messageId())
-                .handle(message.receiptHandle())
                 .build();
+    }
+
+    /**
+     * Completes processing of a message. In the case of SQS, this means deleting the message from the queue.
+     *
+     * @param queueName name of the queue
+     * @param handle of the message to be completed
+     */
+    private void completeMessage(String queueName, String handle) {
+        String queueUrl = getQueueUrlForQueue(queueName);
+        DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .receiptHandle(handle)
+                .build();
+        sqsClient.deleteMessage(deleteMessageRequest);
     }
 }

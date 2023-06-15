@@ -5,7 +5,6 @@ import fi.techappeal.messagingservice.sqs.SqsMessageSender;
 
 public interface MessageReceiver {
     public void subscribe(String queueName, MessageHandler messageHandler);
-    public void completeMessage(String queueName, String handle);
 
     public void stop();
 

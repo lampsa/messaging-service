@@ -48,14 +48,4 @@ class ReceivedMessageWrapperTest {
         assertEquals("value", wrapper.getAttributes().get("key"));
         assertEquals("value2", wrapper.getAttributes().get("key2"));
     }
-
-    @Test
-    void handle() {
-        // Arrange
-        ReceivedMessageWrapper.Builder builder = new ReceivedMessageWrapper.Builder()
-                .payload("payload")
-                .handle("handle");
-        // Act & Assert
-        assertEquals("handle", builder.build().getHandle());
-    }
 }

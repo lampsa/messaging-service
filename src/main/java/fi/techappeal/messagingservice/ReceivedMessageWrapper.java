@@ -8,22 +8,17 @@ import java.util.Map;
  */
 public class ReceivedMessageWrapper {
     private final String id;
-    private final String handle;
     private final String payload;
     private final Map<String, String> attributes;
 
-    private ReceivedMessageWrapper(String id, String handle, String payload, Map<String, String> attributes) {
+    private ReceivedMessageWrapper(String id, String payload, Map<String, String> attributes) {
         this.id = id;
-        this.handle = handle;
         this.payload = payload;
         this.attributes = attributes;
     }
 
     public String getId() {
         return id;
-    }
-    public String getHandle() {
-        return handle;
     }
 
     public String getPayload() {
@@ -37,7 +32,6 @@ public class ReceivedMessageWrapper {
     public static class Builder {
         private String id;
 
-        private String handle;
         private String payload;
         private Map<String, String> attributes;
 
@@ -65,13 +59,8 @@ public class ReceivedMessageWrapper {
             return this;
         }
 
-        public Builder handle(String handle) {
-            this.handle = handle;
-            return this;
-        }
-
         public ReceivedMessageWrapper build() {
-            return new ReceivedMessageWrapper(id, handle, payload, attributes);
+            return new ReceivedMessageWrapper(id, payload, attributes);
         }
     }
 
