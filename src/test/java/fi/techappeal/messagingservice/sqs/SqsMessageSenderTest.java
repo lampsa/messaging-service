@@ -1,6 +1,5 @@
 package fi.techappeal.messagingservice.sqs;
 
-import fi.techappeal.messagingservice.SendMessageBuilder;
 import fi.techappeal.messagingservice.SendMessageWrapper;
 import fi.techappeal.messagingservice.SqsMessagingIT;
 import fi.techappeal.messagingservice.exceptions.NoSuchQueueException;
@@ -40,7 +39,9 @@ class SqsMessageSenderTest {
     void sendMessage_mapsToCorrectRequest() {
         // Arrange
         String payload = "Hello, world!";
-        SendMessageWrapper message = SendMessageBuilder.forPayload(payload)
+
+        SendMessageWrapper message = new SendMessageWrapper.Builder()
+                .payload(payload)
                 .partitionKey("key")
                 .attribute("attr1", "value1")
                 .attribute("attr2", "value2")
@@ -70,7 +71,7 @@ class SqsMessageSenderTest {
         // Arrange
         when(mockSqsClient.sendMessage(any(SendMessageRequest.class)))
                 .thenThrow(OverLimitException.builder().message("Over limit").build());
-        SendMessageWrapper message = SendMessageBuilder.forPayload("Hello, world!").build();
+        SendMessageWrapper message = new SendMessageWrapper.Builder().payload("Hello, world!").build();
         String queueName = "MyQ";
         sender.setQueueUrlCache(queueName, "ignore"); // Set queue URL to avoid mocking SqsClient.getQueueUrl
 
@@ -86,7 +87,7 @@ class SqsMessageSenderTest {
         // Arrange
         when(mockSqsClient.sendMessage(any(SendMessageRequest.class)))
                 .thenThrow(QueueDoesNotExistException.builder().message("Queue does not exist").build());
-        SendMessageWrapper message = SendMessageBuilder.forPayload("Hello, world!").build();
+        SendMessageWrapper message = new SendMessageWrapper.Builder().payload("Hello, world!").build();
         String queueName = "MyQ";
         sender.setQueueUrlCache(queueName, "ignore"); // Set queue URL to avoid mocking SqsClient.getQueueUrl
 

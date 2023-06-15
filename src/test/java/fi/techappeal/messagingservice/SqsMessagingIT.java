@@ -39,8 +39,8 @@ public class SqsMessagingIT {
         }
         // Arrange
         MessageSender queueSender = new MessageSender.Builder().service("sqs").build();
-        SendMessageWrapper message = SendMessageBuilder
-            .forPayload("Hello World")
+        SendMessageWrapper message = new SendMessageWrapper.Builder()
+            .payload("Hello World")
             .attribute("attr1", "value1")
             .attribute("attr2", "value2")
             .build();

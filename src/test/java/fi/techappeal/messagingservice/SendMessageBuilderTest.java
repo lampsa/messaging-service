@@ -10,7 +10,7 @@ class SendMessageBuilderTest {
     @Test
     void forPayload() {
         // Act
-        SendMessageBuilder builder = SendMessageBuilder.forPayload("payload");
+        SendMessageWrapper.Builder builder = new SendMessageWrapper.Builder().payload("payload");
         // Assert
         assertEquals("payload", builder.build().getPayload());
     }
@@ -18,7 +18,8 @@ class SendMessageBuilderTest {
     @Test
     void attributes() {
         // Act
-        SendMessageBuilder builder = SendMessageBuilder.forPayload("payload")
+        SendMessageWrapper.Builder builder = new SendMessageWrapper.Builder()
+                .payload("payload")
                 .attributes(Map.of("key", "value", "key2", "value2"));
         SendMessageWrapper wrapper = builder.build();
         // Assert
@@ -29,7 +30,8 @@ class SendMessageBuilderTest {
     @Test
     void attribute() {
         // Act
-        SendMessageBuilder builder = SendMessageBuilder.forPayload("payload")
+        SendMessageWrapper.Builder builder = new SendMessageWrapper.Builder()
+                .payload("payload")
                 .attribute("key", "value")
                 .attribute("key2", "value2");
         SendMessageWrapper wrapper = builder.build();
