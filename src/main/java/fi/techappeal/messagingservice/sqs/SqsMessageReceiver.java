@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * SQS specific implementation of {@link MessageReceiver}.
+ */
 public class SqsMessageReceiver implements MessageReceiver {
     private static final Logger logger = LoggerFactory.getLogger(SqsMessageReceiver.class);
     private SqsClient sqsClient;
@@ -65,9 +68,13 @@ public class SqsMessageReceiver implements MessageReceiver {
         this.sqsClient = sqsClient;
     }
 
+    /**
+     * Stop receiving messages from SQS queue.
+     */
     public void stop() {
         isRunning = false;
     }
+    
     /**
      * Set queue url for a queue name. (Used for testing.)
      *
@@ -91,6 +98,12 @@ public class SqsMessageReceiver implements MessageReceiver {
         );
     }
 
+    /**
+     * Create a cloud-agnostic message wrapper from an SQS message.
+     *
+     * @param message SQS message
+     * @return cloud-agnostic message wrapper
+     */
     private ReceivedMessageWrapper createMessageWrapper(Message message) {
         Map<String, String> attributes = new HashMap<>();
         for (Map.Entry<String, MessageAttributeValue> entry : message.messageAttributes().entrySet()) {
