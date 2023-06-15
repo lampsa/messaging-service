@@ -1,8 +1,7 @@
 package fi.techappeal.messagingservice;
 
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.CountDownLatch;
+import org.junit.jupiter.api.Timeout;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,6 +16,7 @@ public class SqsMessagingIT {
      * Test that we can send, receive and complete a message.
      */
     @Test
+    @Timeout(7)
     void testSendReceiveCompleteMessage() {
         // Start listener thread
         Thread listenerThread = new Thread(() -> {
