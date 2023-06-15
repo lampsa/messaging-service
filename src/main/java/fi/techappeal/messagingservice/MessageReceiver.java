@@ -1,8 +1,10 @@
 package fi.techappeal.messagingservice;
 
 import fi.techappeal.messagingservice.sqs.SqsMessageReceiver;
-import fi.techappeal.messagingservice.sqs.SqsMessageSender;
 
+/**
+ * MessageReceiver is a cloud-agnostic interface for receiving messages from a cloud messaging service.
+ */
 public interface MessageReceiver {
     public void subscribe(String queueName, MessageHandler messageHandler);
 
