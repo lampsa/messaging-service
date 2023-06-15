@@ -22,7 +22,6 @@ public class SqsMessagingIT {
         Thread listenerThread = new Thread(() -> {
             MessageReceiver queueReceiver = new MessageReceiver.Builder().service("sqs").build();
             queueReceiver.subscribe("MyQ", (ReceivedMessageWrapper receivedMessage) -> {
-                System.out.println(receivedMessage.toString());
                 assertEquals("Hello World", receivedMessage.getPayload());
                 assertEquals("value1", receivedMessage.getAttributes().get("attr1"));
                 assertEquals("value2", receivedMessage.getAttributes().get("attr2"));
@@ -46,7 +45,6 @@ public class SqsMessagingIT {
             .build();
 
         // Act
-        System.out.println("Sending message: " + message.toString());
         queueSender.sendMessage("MyQ", message);
 
         // Wait for the listener thread to complete

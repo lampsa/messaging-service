@@ -23,7 +23,6 @@ public class SqsExceptionMapper {
         } else if (e instanceof QueueDoesNotExistException) {
             throw new NoSuchQueueException(e.getMessage(), e);
         } else {
-            System.out.println("SQS exception: " + e.getMessage());
             throw new MessagingException(e.getMessage(), e);
         }
     }

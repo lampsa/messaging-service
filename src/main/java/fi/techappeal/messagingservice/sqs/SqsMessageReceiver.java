@@ -36,7 +36,7 @@ public class SqsMessageReceiver implements MessageReceiver {
         String queueUrl = getQueueUrlForQueue(queueName);
         isRunning = true;
 
-        logger.info("Starting to receive messages from queue: {}", queueUrl);
+        logger.debug("Starting to receive messages from queue: {}", queueUrl);
         while (isRunning) {
             ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
                     .queueUrl(queueUrl)
@@ -44,12 +44,12 @@ public class SqsMessageReceiver implements MessageReceiver {
                     .maxNumberOfMessages(10)
                     .waitTimeSeconds(20)
                     .build();
-            logger.info("Calling SQS receive message API");
+            logger.debug("Calling SQS receive message API");
             ReceiveMessageResponse receiveMessageResponse = sqsClient.receiveMessage(receiveMessageRequest);
-            logger.info("Received {} messages from queue {}", receiveMessageResponse.messages().size(), queueName);
+            logger.debug("Received {} messages from queue {}", receiveMessageResponse.messages().size(), queueName);
             List<Message> messages = receiveMessageResponse.messages();
             for (Message message : messages) {
-                logger.info("Received message: {}", message.toString());
+                logger.debug("Received message: {}", message.toString());
                 messageHandler.onMessageReceived(createMessageWrapper(message));
                 completeMessage(queueName, message.receiptHandle());
             }

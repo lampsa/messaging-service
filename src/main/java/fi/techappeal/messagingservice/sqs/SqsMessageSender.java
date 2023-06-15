@@ -42,7 +42,7 @@ public class SqsMessageSender implements MessageSender {
                 .messageGroupId(message.getPartitionKey())
                 .messageAttributes(createMessageAttributes(message.getAttributes()))
                 .build();
-            logger.info("Sending message [{}] to queue {}", sendMessageRequest.toString(), queueName);
+            logger.debug("Sending message [{}] to queue {}", sendMessageRequest.toString(), queueName);
             SendMessageResponse response = sqsClient.sendMessage(sendMessageRequest);
         } catch (SqsException e) {
             SqsExceptionMapper.mapToCloudAgnosticException(e);
