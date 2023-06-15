@@ -74,7 +74,7 @@ public class SqsMessageReceiver implements MessageReceiver {
     public void stop() {
         isRunning = false;
     }
-    
+
     /**
      * Set queue url for a queue name. (Used for testing.)
      *
