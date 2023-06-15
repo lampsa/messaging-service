@@ -1,5 +1,6 @@
 package fi.techappeal.messagingservice;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ public class ReceivedMessageWrapper {
     private final String payload;
     private final Map<String, String> attributes;
 
-    ReceivedMessageWrapper(String id, String handle, String payload, Map<String, String> attributes) {
+    private ReceivedMessageWrapper(String id, String handle, String payload, Map<String, String> attributes) {
         this.id = id;
         this.handle = handle;
         this.payload = payload;
@@ -33,7 +34,46 @@ public class ReceivedMessageWrapper {
         return attributes;
     }
 
+    public static class Builder {
+        private String id;
 
+        private String handle;
+        private String payload;
+        private Map<String, String> attributes;
+
+        public Builder() {
+            this.attributes = new HashMap<>();
+        }
+
+        public Builder payload(String payload) {
+            Builder builder = new Builder();
+            builder.payload = payload;
+            return builder;
+        }
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder attribute(String key, String value) {
+            this.attributes.put(key, value);
+            return this;
+        }
+
+        public Builder attributes(Map<String, String> attributes) {
+            this.attributes.putAll(attributes);
+            return this;
+        }
+
+        public Builder handle(String handle) {
+            this.handle = handle;
+            return this;
+        }
+
+        public ReceivedMessageWrapper build() {
+            return new ReceivedMessageWrapper(id, handle, payload, attributes);
+        }
+    }
 
 }
 

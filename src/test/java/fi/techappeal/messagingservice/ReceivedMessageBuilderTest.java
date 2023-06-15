@@ -11,7 +11,7 @@ class ReceivedMessageBuilderTest {
     @Test
     void forPayload() {
         // Arrange
-        ReceivedMessageBuilder builder = ReceivedMessageBuilder.forPayload("payload");
+        ReceivedMessageWrapper.Builder builder = new ReceivedMessageWrapper.Builder().payload("payload");
         // Act & Assert
         assertEquals("payload", builder.build().getPayload());
     }
@@ -19,8 +19,7 @@ class ReceivedMessageBuilderTest {
     @Test
     void id() {
         // Arrange
-        ReceivedMessageBuilder builder = ReceivedMessageBuilder.forPayload("payload")
-                .id("id");
+        ReceivedMessageWrapper.Builder builder = new ReceivedMessageWrapper.Builder().payload("payload").id("id");
         // Act & Assert
         assertEquals("id", builder.build().getId());
     }
@@ -28,7 +27,8 @@ class ReceivedMessageBuilderTest {
     @Test
     void attribute() {
         // Arrange
-        ReceivedMessageBuilder builder = ReceivedMessageBuilder.forPayload("payload")
+        ReceivedMessageWrapper.Builder builder = new ReceivedMessageWrapper.Builder()
+                .payload("payload")
                 .attribute("key", "value")
                 .attribute("key2", "value2");
         // Act & Assert
@@ -39,8 +39,9 @@ class ReceivedMessageBuilderTest {
     @Test
     void attributes() {
         // Arrange
-        ReceivedMessageBuilder builder = ReceivedMessageBuilder.forPayload("payload")
-                .attributes(Map.of("key", "value", "key2", "value2"));
+           ReceivedMessageWrapper.Builder builder = new ReceivedMessageWrapper.Builder()
+                    .payload("payload")
+                    .attributes(Map.of("key", "value", "key2", "value2"));
         // Act
         ReceivedMessageWrapper wrapper = builder.build();
         // Assert
@@ -51,7 +52,8 @@ class ReceivedMessageBuilderTest {
     @Test
     void handle() {
         // Arrange
-        ReceivedMessageBuilder builder = ReceivedMessageBuilder.forPayload("payload")
+        ReceivedMessageWrapper.Builder builder = new ReceivedMessageWrapper.Builder()
+                .payload("payload")
                 .handle("handle");
         // Act & Assert
         assertEquals("handle", builder.build().getHandle());

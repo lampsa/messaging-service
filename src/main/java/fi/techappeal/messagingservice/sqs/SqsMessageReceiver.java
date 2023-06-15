@@ -2,7 +2,6 @@ package fi.techappeal.messagingservice.sqs;
 
 import fi.techappeal.messagingservice.MessageHandler;
 import fi.techappeal.messagingservice.MessageReceiver;
-import fi.techappeal.messagingservice.ReceivedMessageBuilder;
 import fi.techappeal.messagingservice.ReceivedMessageWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +112,7 @@ public class SqsMessageReceiver implements MessageReceiver {
         for (Map.Entry<String, MessageAttributeValue> entry : message.messageAttributes().entrySet()) {
             attributes.put(entry.getKey(), entry.getValue().stringValue());
         }
-        return ReceivedMessageBuilder.forPayload(message.body())
+        return new ReceivedMessageWrapper.Builder().payload(message.body())
                 .attributes(attributes)
                 .id(message.messageId())
                 .handle(message.receiptHandle())
