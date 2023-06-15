@@ -6,7 +6,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SendMessageBuilderTest {
+class SendMessageWrapperTest {
     @Test
     void forPayload() {
         // Act

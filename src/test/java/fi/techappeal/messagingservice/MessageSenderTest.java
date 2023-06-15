@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests for ${@link MessageSender}.
  */
-class MessagingServiceBuilderTest {
+class MessageSenderTest {
     /**
      * Test that MessagingServiceBuilder returns a SqsClientWrapper when the service is sqs.
      */
