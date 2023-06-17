@@ -59,7 +59,9 @@ public class SqsMessageReceiver implements MessageReceiver {
                 switch (state) {
                     case PROCESSED: completeMessage(queueName, message.receiptHandle()); break;
                     case SKIPPED: break;
-                    case ABANDONED: throw new IllegalStateException("Dead letter queue not implemented");
+                    case ABANDONED:
+                        logger.warn("Abandoning message: {}", message.messageId());
+                        throw new IllegalStateException("Dead letter queue not implemented");
                 }
             }
         }
