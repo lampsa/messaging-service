@@ -22,6 +22,11 @@ abstract class AbstractSqsClient {
                 .build();
     }
 
+    /**
+     * Get SQS client.
+     *
+     * @return SQS client
+     */
     protected SqsClient getSqsClient() {
         return sqsClient;
     }
