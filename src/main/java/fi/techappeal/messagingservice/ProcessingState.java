@@ -13,7 +13,7 @@ public enum ProcessingState {
      */
     SKIPPED,
     /**
-     * The message was abandoned by the MessageHandler as faulty.
+     * The message was abandoned by the MessageHandler as faulty (e.g.to be placed into a dead letter queue).
      */
     ABANDONED
 }
