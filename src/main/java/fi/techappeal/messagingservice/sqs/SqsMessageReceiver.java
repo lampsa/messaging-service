@@ -17,17 +17,11 @@ import java.util.Map;
 /**
  * SQS specific implementation of {@link MessageReceiver}.
  */
-public class SqsMessageReceiver implements MessageReceiver {
+public class SqsMessageReceiver extends AbstractSqsClient implements MessageReceiver {
     private static final Logger logger = LoggerFactory.getLogger(SqsMessageReceiver.class);
-    private SqsClient sqsClient;
-    private final Map<String, String> queueUrlCache = new HashMap<>(); // queue name -> queue url cache
     private boolean isRunning;
     public SqsMessageReceiver() {
-        String regionString = System.getProperty("MESSAGING_SERVICE_REGION", "eu-central-1");
-        logger.debug("Initiating SQS receiver client using region {}", regionString);
-        this.sqsClient = SqsClient.builder()
-                .region(Region.of(regionString))
-                .build();
+       super();
     }
 
     /**
@@ -49,7 +43,7 @@ public class SqsMessageReceiver implements MessageReceiver {
                     .waitTimeSeconds(20)
                     .build();
             logger.debug("Calling SQS receive message API");
-            ReceiveMessageResponse receiveMessageResponse = sqsClient.receiveMessage(receiveMessageRequest);
+            ReceiveMessageResponse receiveMessageResponse = getSqsClient().receiveMessage(receiveMessageRequest);
             logger.debug("Received {} messages from queue {}", receiveMessageResponse.messages().size(), queueName);
             List<Message> messages = receiveMessageResponse.messages();
             ProcessingState state;
@@ -68,42 +62,10 @@ public class SqsMessageReceiver implements MessageReceiver {
     }
 
     /**
-     * Allows manually setting the SQS client. (Used for testing.)
-     *
-     * @param sqsClient Mocked SQS client
-     */
-    protected void setSqsClient(SqsClient sqsClient) {
-        this.sqsClient = sqsClient;
-    }
-
-    /**
      * Stop receiving messages from SQS queue.
      */
     public void stop() {
         isRunning = false;
-    }
-
-    /**
-     * Set queue url for a queue name. (Used for testing.)
-     *
-     * @param queueName queue name
-     * @param queueUrl  mock queue url
-     */
-    protected void setQueueUrlCache(String queueName, String queueUrl) {
-        queueUrlCache.put(queueName, queueUrl);
-    }
-
-
-    /**
-     * Get queue url for a queue name from the SQS service. Cache the queue url for future use.
-     *
-     * @param queueName queue name
-     * @return queue url
-     */
-    private String getQueueUrlForQueue(String queueName) {
-        return queueUrlCache.computeIfAbsent(queueName,
-                name -> sqsClient.getQueueUrl(GetQueueUrlRequest.builder().queueName(name).build()).queueUrl()
-        );
     }
 
     /**
@@ -135,6 +97,6 @@ public class SqsMessageReceiver implements MessageReceiver {
                 .queueUrl(queueUrl)
                 .receiptHandle(handle)
                 .build();
-        sqsClient.deleteMessage(deleteMessageRequest);
+        getSqsClient().deleteMessage(deleteMessageRequest);
     }
 }
