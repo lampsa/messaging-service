@@ -2,6 +2,7 @@ package fi.techappeal.messagingservice.sqs;
 
 import fi.techappeal.messagingservice.MessageHandler;
 import fi.techappeal.messagingservice.MessageReceiver;
+import fi.techappeal.messagingservice.ProcessingState;
 import fi.techappeal.messagingservice.ReceivedMessageWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,10 +52,15 @@ public class SqsMessageReceiver implements MessageReceiver {
             ReceiveMessageResponse receiveMessageResponse = sqsClient.receiveMessage(receiveMessageRequest);
             logger.debug("Received {} messages from queue {}", receiveMessageResponse.messages().size(), queueName);
             List<Message> messages = receiveMessageResponse.messages();
+            ProcessingState state;
             for (Message message : messages) {
                 logger.debug("Received message: {}", message.toString());
-                messageHandler.onMessageReceived(createMessageWrapper(message));
-                completeMessage(queueName, message.receiptHandle());
+                state = messageHandler.onMessageReceived(createMessageWrapper(message));
+                switch (state) {
+                    case PROCESSED: completeMessage(queueName, message.receiptHandle()); break;
+                    case SKIPPED: break;
+                    case ABANDONED: throw new IllegalStateException("Dead letter queue not implemented");
+                }
             }
         }
     }

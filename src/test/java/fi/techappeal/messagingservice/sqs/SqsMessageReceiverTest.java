@@ -1,5 +1,6 @@
 package fi.techappeal.messagingservice.sqs;
 
+import fi.techappeal.messagingservice.ProcessingState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.sqs.SqsClient;
@@ -59,6 +60,7 @@ class SqsMessageReceiverTest {
             assertEquals("123", message.getId());
             assertEquals("value1", message.getAttributes().get("attr1"));
             receiver.stop();
+            return ProcessingState.PROCESSED;
         });
     }
 }

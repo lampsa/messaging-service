@@ -26,6 +26,7 @@ public class SqsMessagingIT {
                 assertEquals("value1", receivedMessage.getAttributes().get("attr1"));
                 assertEquals("value2", receivedMessage.getAttributes().get("attr2"));
                 queueReceiver.stop();
+                return ProcessingState.PROCESSED;
             });
         });
         listenerThread.start();
