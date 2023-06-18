@@ -42,35 +42,40 @@ To get started with the Cloud Agnostic Messaging Service, follow these steps:
     </dependencies>
 ```
 ---
-To use the Cloud Agnostic Messaging Service, you need to create an instance of the MessagingService interface.
-This will provide you with a cloud-specific instance of the MessagingService interface that you can use to send 
-and receive messages. Small example below:
+To use the Cloud Agnostic Messaging libray, you need to create a MessageSender and a MessageReceiver instances.
+The examples below show how to create a message receiver instance, which listens to a queue named MyQ and prints
+out the message payload and attributes. 
 
 ```java
-public class MessageSenderExample {
-    public void main(String[] args) {
-        MessageSender sender = new MessageSenger.Builder().build();
-        SendMessageWrapper message = SendMessageBuilder
-               .forPayload("Hello World")
-               .attribute("attr1", "value1")
-               .attribute("attr2", "value2")
-               .build();
-        
-        sender.sendMessage("MyQ", message);
-    }
+public class MessageReceiverExample {
+   public static void main(String[] args) {
+      MessageReceiver receiver = new MessageReceiver.Builder().build();
+      receiver.subscribe("MyQ", (message) -> {
+         System.out.println("Id: "+message.getId());
+         System.out.println("Payload: "+message.getPayload());
+         for (String key : message.getAttributes().keySet()) {
+            System.out.println("Attribute: "+key+" = "+message.getAttributes().get(key));
+         }
+         return ProcessingState.PROCESSED;
+      });
+   }
 }
 ```
+The second example shows how to create a message sender instance, which sends a message to a queue named MyQ.
+The message payload is "Hello World" and it has two attributes: attr1 with value "value1" and attr2 with value "value2".
+It is noteworthy that the examples assumes that the queue already exists in eu-central-1 region.
 ```java
-public class MessageReceiverExample {
-    public void main(String[] args) {
-        MessageReceiver receiver = new MessageReceiver.Builder().build();
-        receiver.receiveMessages("MyQ", (message) -> {
-            System.out.println(message.getMessageId());
-            System.out.println(message.getPayload());
-            System.out.println(message.getAttribute("attr1"));
-            System.out.println(message.getAttribute("attr2"));
-        });
-    }
+public class MessageSenderExample {
+   public static void main(String[] args) {
+      MessageSender sender = new MessageSender.Builder().build();
+      SendMessageWrapper message = new SendMessageWrapper.Builder()
+              .payload("Hello World")
+              .attribute("attr1", "value1")
+              .attribute("attr2", "value2")
+              .build();
+
+      sender.sendMessage("MyQ", message);
+   }
 }
 ```
 ---
