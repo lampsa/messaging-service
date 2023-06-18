@@ -3,6 +3,7 @@ package fi.techappeal.messagingservice.sqs;
 import fi.techappeal.messagingservice.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.services.sqs.model.*;
 
 import java.util.HashMap;
@@ -37,6 +38,8 @@ public class SqsMessageSender extends AbstractSqsClient implements MessageSender
             logger.debug("Sending message [{}] to queue {}", sendMessageRequest.toString(), queueName);
             SendMessageResponse response = getSqsClient().sendMessage(sendMessageRequest);
         } catch (SqsException e) {
+            SqsExceptionMapper.mapToCloudAgnosticException(e);
+        } catch (SdkClientException e) {
             SqsExceptionMapper.mapToCloudAgnosticException(e);
         }
     }

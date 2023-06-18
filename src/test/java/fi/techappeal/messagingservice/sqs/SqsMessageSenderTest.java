@@ -4,9 +4,11 @@ import fi.techappeal.messagingservice.SendMessageWrapper;
 import fi.techappeal.messagingservice.SqsMessagingIT;
 import fi.techappeal.messagingservice.exceptions.NoSuchQueueException;
 import fi.techappeal.messagingservice.exceptions.RateLimitException;
+import fi.techappeal.messagingservice.exceptions.ApiTimeoutException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import software.amazon.awssdk.core.exception.ApiCallTimeoutException;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.*;
 
@@ -93,5 +95,21 @@ class SqsMessageSenderTest {
 
         // Act and Assert
         assertThrows(NoSuchQueueException.class, () -> sender.sendMessage(queueName, message));
+    }
+
+    /**
+     * Test that SQS specific SdkClientException is mapped to a generic ApimTimeoutException.
+     */
+    @Test
+    void sendMessage_Timeout() {
+        // Arrange
+        when(mockSqsClient.sendMessage(any(SendMessageRequest.class)))
+                .thenThrow(ApiCallTimeoutException.builder().message("Timeout").build());
+        SendMessageWrapper message = new SendMessageWrapper.Builder().payload("Hello, world!").build();
+        String queueName = "MyQ";
+        sender.setQueueUrlCache(queueName, "ignore"); // Set queue URL to avoid mocking SqsClient.getQueueUrl
+
+        // Act and Assert
+        assertThrows(ApiTimeoutException.class, () -> sender.sendMessage(queueName, message));
     }
 }
