@@ -70,12 +70,12 @@ public class MessageSender {
 # Configuration
 The Cloud Agnostic Messaging Service uses the following environment variables for configuration:
 
-| Variable                     | Service | Description                                                        |
-|------------------------------| --- |--------------------------------------------------------------------|
-| `MESSAGING_SERVICE_PROVIDER` | All | The messaging provider to use. Currently, only `sqs` is supported. |
-| `MESSAGING_SERVICE_REGION`   | AWS SQS | The AWS region to use. |
-| `SQS_VISIBILITY_TIMEOUT` | AWS SQS | The visibility timeout for messages in seconds. |
-| `SQS_WAIT_TIME_SECONDS` | AWS SQS | The wait time for long polling in seconds. |
+| Variable                    | Service | Description                                                                         |
+|-----------------------------| --- |-------------------------------------------------------------------------------------|
+| `MESSAGING_SERVICE_PROVIDER` | All | The messaging provider to use. Currently, only `sqs` is supported.                  |
+| `MESSAGING_SERVICE_REGION`  | AWS SQS | The AWS region to use. The default is `eu-central-1`.                               |
+| `SQS_VISIBILITY_TIMEOUT`    | AWS SQS | The visibility timeout for messages in seconds. The default is `20`.                |
+| `SQS_MAX_NUMBER_OF_MESSAGES`| AWS SQS | The maximum number of messages to receive in a single request. The default is `10`. |
 
 Please make sure you have the necessary credentials and permissions set up for the chosen provider.
 
