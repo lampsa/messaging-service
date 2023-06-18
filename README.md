@@ -74,6 +74,8 @@ The Cloud Agnostic Messaging Service uses the following environment variables fo
 |------------------------------| --- |--------------------------------------------------------------------|
 | `MESSAGING_SERVICE_PROVIDER` | All | The messaging provider to use. Currently, only `sqs` is supported. |
 | `MESSAGING_SERVICE_REGION`   | AWS SQS | The AWS region to use. |
+| `SQS_VISIBILITY_TIMEOUT` | AWS SQS | The visibility timeout for messages in seconds. |
+| `SQS_WAIT_TIME_SECONDS` | AWS SQS | The wait time for long polling in seconds. |
 
 Please make sure you have the necessary credentials and permissions set up for the chosen provider.
 

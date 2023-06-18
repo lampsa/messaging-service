@@ -6,8 +6,6 @@ import fi.techappeal.messagingservice.ProcessingState;
 import fi.techappeal.messagingservice.ReceivedMessageWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.*;
 
 import java.util.HashMap;
@@ -20,6 +18,11 @@ import java.util.Map;
 public class SqsMessageReceiver extends AbstractSqsClient implements MessageReceiver {
     private static final Logger logger = LoggerFactory.getLogger(SqsMessageReceiver.class);
     private boolean isRunning;
+    private final Integer visibilityTimeout = System.getenv("SQS_VISIBILITY_TIMEOUT") != null ?
+            Integer.parseInt(System.getenv("SQS_VISIBILITY_TIMEOUT")) : 20;
+    private final Integer maxNumberOfMessages = System.getenv("SQS_MAX_NUMBER_OF_MESSAGES") != null ?
+            Integer.parseInt(System.getenv("SQS_MAX_NUMBER_OF_MESSAGES")) : 10;
+
     public SqsMessageReceiver() {
        super();
     }
@@ -39,8 +42,8 @@ public class SqsMessageReceiver extends AbstractSqsClient implements MessageRece
             ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
                     .queueUrl(queueUrl)
                     .messageAttributeNames("All")
-                    .maxNumberOfMessages(10)
-                    .waitTimeSeconds(20)
+                    .maxNumberOfMessages(maxNumberOfMessages)
+                    .waitTimeSeconds(visibilityTimeout)
                     .build();
             logger.debug("Calling SQS receive message API");
             ReceiveMessageResponse receiveMessageResponse = getSqsClient().receiveMessage(receiveMessageRequest);
