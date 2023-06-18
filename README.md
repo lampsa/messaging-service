@@ -47,22 +47,29 @@ This will provide you with a cloud-specific instance of the MessagingService int
 and receive messages. Small example below:
 
 ```java
-public class MessageSender {
+public class MessageSenderExample {
     public void main(String[] args) {
-        MessagingService queueService = MessagingServiceBuilder.builder().build();
+        MessageSender sender = new MessageSenger.Builder().build();
         SendMessageWrapper message = SendMessageBuilder
                .forPayload("Hello World")
                .attribute("attr1", "value1")
                .attribute("attr2", "value2")
                .build();
         
-        queueService.sendMessage("MyQ", message);
-        List<ReceivedMessageWrapper> messages = queueService.receiveMessages("MyQ", 1); // Receive 1 message
-
-        ReceivedMessageWrapper receivedMessage = messages.get(0);
-        // Process message
-       
-        queueService.completeMessage("MyQ", receivedMessage.getHandle());
+        sender.sendMessage("MyQ", message);
+    }
+}
+```
+```java
+public class MessageReceiverExample {
+    public void main(String[] args) {
+        MessageReceiver receiver = new MessageReceiver.Builder().build();
+        receiver.receiveMessages("MyQ", (message) -> {
+            System.out.println(message.getMessageId());
+            System.out.println(message.getPayload());
+            System.out.println(message.getAttribute("attr1"));
+            System.out.println(message.getAttribute("attr2"));
+        });
     }
 }
 ```
