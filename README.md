@@ -80,7 +80,10 @@ public class MessageSenderExample {
 ```
 ---
 # Configuration
-The Cloud Agnostic Messaging Service uses the following environment variables for configuration:
+The Cloud Agnostic Messaging Service uses the following environment variables for configuration. You can switch between 
+different providers by setting the `MESSAGING_SERVICE_PROVIDER` environment variable to the desired provider. 
+The following table lists the supported environment variables. Since the library currently only supports AWS SQS as the
+service provider, the environment variables are only used by the SQS implementation.
 
 | Variable                    | Service | Description                                                                         |
 |-----------------------------| --- |-------------------------------------------------------------------------------------|
