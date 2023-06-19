@@ -16,7 +16,7 @@ The library is designed to be extensible, so you can easily add support for new 
 # Features
 - Currently, supports AWS SQS as the service provider
 - Provides a common interface for message publishing and consumption operations
-- Handles provider-specific exceptions and maps them to generic error categories
+- Offers limited support for mapping provider-specific exceptions to generic exceptions
 - Supports message attributes for enriching message metadata
 - JSON payload serialization and deserialization is not implemented
 - Asynchronous messaging is not supported
@@ -42,7 +42,7 @@ To get started with the Cloud Agnostic Messaging Service, follow these steps:
     </dependencies>
 ```
 ---
-To use the Cloud Agnostic Messaging libray, you need to create a MessageSender and a MessageReceiver instances.
+Here is a canonical example for sending and receiving messages using the Cloud Agnostic Messaging Service. To use the Cloud Agnostic Messaging library, you need to create a MessageSender and a MessageReceiver instances.
 The examples below show how to create a message receiver instance, which listens to a queue named MyQ and prints
 out the message payload and attributes. 
 
